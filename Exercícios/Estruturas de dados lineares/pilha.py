@@ -29,10 +29,10 @@ class Pilha:
     # O índice do elemento que está no topo da pilha
     topo: int
     # A capacidade máxima de valores que a pilha armazena
-    capacidade: int
+    capacidade_maxima: int
 
     def __init__(self, capacidade: int):
-        self.capacidade = capacidade
+        self.capacidade_maxima = capacidade
         self.valores = array(capacidade, '')
         self.topo = -1
 
@@ -43,7 +43,7 @@ class Pilha:
         Requer que a quantidade de elementos
         na pilha seja menor que MAX_TAM.
         '''
-        assert self.topo < self.capacidade - 1
+        assert self.topo < self.capacidade_maxima - 1
         self.topo = self.topo + 1
         self.valores[self.topo] = item
 
@@ -91,9 +91,24 @@ class Pilha:
         >>> p.empilha('coelho')
         >>> p.cheia()
         False
-        >>> for i in range(p.capacidade - 1):
+        >>> for i in range(p.capacidade_maxima - 1):
         ...    p.empilha('lebre')
         >>> p.cheia()
         True
         '''
-        return self.topo == self.capacidade - 1
+        return self.topo == self.capacidade_maxima - 1
+    
+    def capacidade(self) -> int:
+        '''
+        Devolve a capacidade máxima da pilha, ou seja, o número máximo
+        de valores que ela pode armazenar.
+
+        Exemplos
+        >>> p = Pilha(130)
+        >>> p.capacidade()
+        130
+        >>> p.empilha('caderno')
+        >>> p.capacidade()
+        130
+        '''
+        return self.capacidade_maxima
