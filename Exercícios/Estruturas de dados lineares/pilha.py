@@ -1,13 +1,11 @@
 from ed import array
 
-MAX_TAM = 100
-
 class Pilha:
     '''
     Uma coleção de strings que segue a política LIFO: o elemento mais
     recentemente inserido é o primeiro a ser removido.
 
-    >>> p = Pilha()
+    >>> p = Pilha(50)
     >>> p.vazia()
     True
     >>> p.empilha('O')
@@ -30,9 +28,12 @@ class Pilha:
     valores: array[str]
     # O índice do elemento que está no topo da pilha
     topo: int
+    # A capacidade máxima de valores que a pilha armazena
+    capacidade: int
 
-    def __init__(self):
-        self.valores = array(MAX_TAM, '')
+    def __init__(self, capacidade: int):
+        self.capacidade = capacidade
+        self.valores = array(capacidade, '')
         self.topo = -1
 
     def empilha(self, item: str):
@@ -42,7 +43,7 @@ class Pilha:
         Requer que a quantidade de elementos
         na pilha seja menor que MAX_TAM.
         '''
-        assert self.topo < MAX_TAM - 1
+        assert self.topo < self.capacidade - 1
         self.topo = self.topo + 1
         self.valores[self.topo] = item
 
@@ -53,7 +54,7 @@ class Pilha:
         Requer que a pilha não esteja vazia.
 
         Exemplos
-        >>> p = Pilha()
+        >>> p = Pilha(100)
         >>> p.empilha('casa')
         >>> p.empilha('na')
         >>> p.empilha('árvore')
@@ -70,7 +71,7 @@ class Pilha:
         Devolve True se a pilha está vazia, False caso contrário.
 
         Exemplos
-        >>> p = Pilha()
+        >>> p = Pilha(20)
         >>> p.vazia()
         True
         >>> p.empilha('lar')
@@ -84,15 +85,15 @@ class Pilha:
         Devolve True se a pilha está cheia, False caso contrário.
 
         Exemplos
-        >>> p = Pilha()
+        >>> p = Pilha(100)
         >>> p.cheia()
         False
         >>> p.empilha('coelho')
         >>> p.cheia()
         False
-        >>> for i in range(99):
+        >>> for i in range(p.capacidade - 1):
         ...    p.empilha('lebre')
         >>> p.cheia()
         True
         '''
-        return self.topo == MAX_TAM - 1
+        return self.topo == self.capacidade - 1
