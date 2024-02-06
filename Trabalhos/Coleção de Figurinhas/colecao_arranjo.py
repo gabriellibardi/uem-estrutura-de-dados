@@ -56,7 +56,7 @@ class Colecao:
 
     figurinhas: array[int] # Quantidade de cada figurinha representada pelo seu índice
 
-    def __init__(self, quantidade_total: int):
+    def __init__(self, quantidade_total: int) -> None:
         '''
         Cria uma coleção de figurinhas com a *quantidade_total*
         de figurinhas do álbum.
@@ -212,7 +212,7 @@ class Colecao:
         >>> x.troca_maxima(y)
         Traceback (most recent call last):
         ...
-        ValueError: O tamanho das coleções são diferentes.
+        ValueError: O tamanho das coleções é diferente.
 
         >>> x.troca_maxima(z)
         >>> x.str_possuidas()
@@ -226,7 +226,7 @@ class Colecao:
         '''
         # Certifica que as duas coleções possuem o mesmo tamanho
         if len(self.figurinhas) != len(colecao.figurinhas):
-            raise ValueError('O tamanho das coleções são diferentes.')
+            raise ValueError('O tamanho das coleções é diferente.')
         else:
             # Percorre as duas coleções e coloca as cartas que podem 
             # ser trocadas em arranjos.

@@ -50,12 +50,12 @@ class Colecao:
 
     >>> c.troca_maxima(d)
     >>> c.str_possuidas()
-    '[13, 15, 19, 24, 48]'    
+    '[13, 15, 19, 24, 48]'
     >>> c.str_repetidas()
     '[24 (1), 48 (1)]'
     >>> d.str_possuidas()
-    '[13, 15, 19, 24]'    
-    >>> c.str_repetidas()
+    '[13, 15, 19, 24]'
+    >>> d.str_repetidas()
     '[]'
     '''
     figurinhas: No | None
@@ -175,6 +175,7 @@ class Colecao:
                     string += str(c.item) + ', '
                     item_atual = c.item
                 c = c.proximo
+            # Último item da colecão
             if c.item != item_atual:
                 string += str(c.item)
             else:
@@ -185,8 +186,46 @@ class Colecao:
         '''
         Gera uma representação em string das figurinhas repetidas da coleção,
         indicando a quantidade de repetições.
+        
+        Exemplos:
+        >>> c = Colecao(100)
+        >>> c.insere(21)
+        >>> c.insere(1)
+        >>> c.insere(33)
+        >>> c.insere(1)
+        >>> c.insere(33)
+        >>> c.insere(33)
+        >>> c.str_repetidas()
+        '[1 (1), 33 (2)]'
         '''
-        raise NotImplemented
+        string = '['
+        if self.figurinhas is not None:
+            c = self.figurinhas
+            item_atual = 0
+            repeticoes = 0
+            while c.proximo is not None:
+                # Item se repete
+                if c.item == item_atual:
+                    repeticoes += 1
+                # Trocou de item
+                else:
+                    if repeticoes >= 1:
+                        string += str(item_atual) + ' (' + str(repeticoes) + '), '
+                    item_atual = c.item
+                    repeticoes = 0
+                c = c.proximo
+            # Último item da coleção repetido
+            if c.item == item_atual:
+                repeticoes += 1
+                string += str(item_atual) + ' (' + str(repeticoes) + ')'
+            # Último item vindo depois de uma repetição
+            elif repeticoes >= 1:
+                string += str(item_atual) + ' (' + str(repeticoes) + ')'
+            # Último item vindo depois de um item sem repetição
+            else:
+                if string[-1] != '[':
+                    string = string[:-2]
+        return string + ']'
 
     def troca_maxima(self, colecao: Colecao):
         '''
@@ -195,5 +234,120 @@ class Colecao:
         As figurinhas trocadas são escolhidas por ordem.
 
         Requer que as duas coleções possuam o mesmo tamanho.
+
+        Exemplos:
+        >>> x = Colecao(100)
+        >>> x.insere(93)
+        >>> x.insere(32)
+        >>> x.insere(32)
+        >>> x.insere(32)
+        >>> x.insere(12)
+        >>> x.insere(12)
+        >>> x.insere(4)
+        >>> x.insere(4)
+        >>> x.str_possuidas()
+        '[4, 12, 32, 93]'
+        >>> x.str_repetidas()
+        '[4 (1), 12 (1), 32 (2)]'
+
+        >>> y = Colecao(50)
+        >>> y.insere(21)
+        >>> y.insere(21)
+        >>> y.str_possuidas()
+        '[21]'
+        >>> y.str_repetidas()
+        '[21 (1)]'
+
+        >>> z = Colecao(100)
+        >>> z.insere(31)
+        >>> z.insere(31)
+        >>> z.insere(2)
+        >>> z.insere(2)
+        >>> z.str_possuidas()
+        '[2, 31]'
+        >>> z.str_repetidas()
+        '[2 (1), 31 (1)]'
+
+        >>> x.troca_maxima(y)
+        Traceback (most recent call last):
+        ...
+        ValueError: O tamanho das coleções é diferente.
+
+        >>> x.troca_maxima(z)
+        >>> x.str_possuidas()
+        '[2, 4, 12, 31, 32, 93]'
+        >>> x.str_repetidas()
+        '[32 (2)]'
+        >>> z.str_possuidas()
+        '[2, 4, 12, 31]'
+        >>> z.str_repetidas()
+        '[]'
         '''
-        raise NotImplemented
+        a = self
+        b = colecao
+        if self.tamanho_max != colecao.tamanho_max:
+            raise ValueError('O tamanho das coleções é diferente.')
+        else:
+            if a is not None and b is not None:
+                repetidas_a = a.__repetidas()
+                repetidas_b = b.__repetidas()
+                # Caso as duas coleções possuam figurinhas repetidas
+                if repetidas_a is not None and repetidas_b is not None:
+                    a.__remove_nao_trocaveis(repetidas_b)
+                    b.__remove_nao_trocaveis(repetidas_a)
+                    trocaveis_a = repetidas_a.figurinhas
+                    trocaveis_b = repetidas_b.figurinhas
+                    if trocaveis_a is not None and trocaveis_b is not None:
+                        # Enquanto uma das coleções trocáveis não chegar ao fim
+                        while trocaveis_a.proximo is not None and trocaveis_b.proximo is not None:
+                            a.insere(trocaveis_b.item)
+                            b.remove(trocaveis_b.item)
+                            b.insere(trocaveis_a.item)
+                            a.remove(trocaveis_a.item)
+                            trocaveis_a = trocaveis_a.proximo
+                            trocaveis_b =trocaveis_b.proximo
+                        # Última figurinha
+                        a.insere(trocaveis_b.item)
+                        b.remove(trocaveis_b.item)
+                        b.insere(trocaveis_a.item)
+                        a.remove(trocaveis_a.item)
+                        
+        
+    def __repetidas(self) -> Colecao:
+        '''
+        Cria uma nova colecao com as figurinhas repetidas da *colecao*
+        '''
+        c = self.figurinhas
+        assert c is not None
+        repetidas = Colecao(self.tamanho_max)
+        item_atual = 0
+        ja_repetida = False
+        while c.proximo is not None:
+            if c.item == item_atual and not ja_repetida:
+                repetidas.insere(c.item)
+                ja_repetida = True
+            elif c.item != item_atual:
+                item_atual = c.item
+                ja_repetida = False
+            c = c.proximo
+        # Última figurinha
+        if c.item == item_atual and not ja_repetida:
+            repetidas.insere(c.item)
+        return repetidas
+    
+    def __remove_nao_trocaveis(self, repetidas: Colecao):
+        '''
+        Remove as figurinhas não trocaveis da coleção de *repetidas* em
+        comparação com outra *colecao*
+        '''
+        rep = repetidas.figurinhas
+        c = self.figurinhas
+        if rep is not None and c is not None:
+            while rep.proximo is not None:
+                # Conferir se o item das repetidas atual está na coleção
+                while c.proximo is not None and rep.item > c.proximo.item:
+                    c = c.proximo
+                if c.proximo is not None and rep.item == c.proximo.item:
+                    repetidas.remove(rep.item)
+                rep = rep.proximo
+
