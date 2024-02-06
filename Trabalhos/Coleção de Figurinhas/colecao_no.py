@@ -236,51 +236,102 @@ class Colecao:
         Requer que as duas coleções possuam o mesmo tamanho.
 
         Exemplos:
-        >>> x = Colecao(100)
-        >>> x.insere(93)
-        >>> x.insere(32)
-        >>> x.insere(32)
-        >>> x.insere(32)
-        >>> x.insere(12)
-        >>> x.insere(12)
-        >>> x.insere(4)
-        >>> x.insere(4)
-        >>> x.str_possuidas()
-        '[4, 12, 32, 93]'
-        >>> x.str_repetidas()
-        '[4 (1), 12 (1), 32 (2)]'
+        >>> a = Colecao(10)
+        >>> b = Colecao(11)
 
-        >>> y = Colecao(50)
-        >>> y.insere(21)
-        >>> y.insere(21)
-        >>> y.str_possuidas()
-        '[21]'
-        >>> y.str_repetidas()
-        '[21 (1)]'
-
-        >>> z = Colecao(100)
-        >>> z.insere(31)
-        >>> z.insere(31)
-        >>> z.insere(2)
-        >>> z.insere(2)
-        >>> z.str_possuidas()
-        '[2, 31]'
-        >>> z.str_repetidas()
-        '[2 (1), 31 (1)]'
-
-        >>> x.troca_maxima(y)
+        >>> a.troca_maxima(b)
         Traceback (most recent call last):
         ...
         ValueError: O tamanho das coleções é diferente.
 
-        >>> x.troca_maxima(z)
-        >>> x.str_possuidas()
-        '[2, 4, 12, 31, 32, 93]'
-        >>> x.str_repetidas()
-        '[32 (2)]'
-        >>> z.str_possuidas()
-        '[2, 4, 12, 31]'
-        >>> z.str_repetidas()
+        >>> a = Colecao(5)
+        >>> b = Colecao(5)
+        >>> a.str_possuidas()
+        '[]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> b.str_possuidas()
+        '[]'
+        >>> b.str_repetidas()
+        '[]'
+        >>> a.troca_maxima(b)
+        >>> a.str_possuidas()
+        '[]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> b.str_possuidas()
+        '[]'
+        >>> b.str_repetidas()
+        '[]'
+
+        >>> a.insere(1)
+        >>> a.insere(2)
+        >>> a.str_possuidas()
+        '[1, 2]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> a.troca_maxima(b)
+        >>> a.str_possuidas()
+        '[1, 2]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> b.str_possuidas()
+        '[]'
+        >>> b.str_repetidas()
+        '[]'
+
+        >>> b.insere(3)
+        >>> b.insere(5)
+        >>> b.str_possuidas()
+        '[3, 5]'
+        >>> b.str_repetidas()
+        '[]'
+        >>> a.troca_maxima(b)
+        >>> a.str_possuidas()
+        '[1, 2]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> b.str_possuidas()
+        '[3, 5]'
+        >>> b.str_repetidas()
+        '[]'
+
+        >>> b.insere(5)
+        >>> b.str_possuidas()
+        '[3, 5]'
+        >>> b.str_repetidas()
+        '[5 (1)]'
+        >>> a.troca_maxima(b)
+        >>> a.str_possuidas()
+        '[1, 2]'
+        >>> a.str_repetidas()
+        '[]'
+        >>> b.str_possuidas()
+        '[3, 5]'
+        >>> b.str_repetidas()
+        '[5 (1)]'
+
+        >>> a.insere(1)
+        >>> a.insere(2)
+        >>> a.insere(2)
+        >>> b.insere(3)
+        >>> b.insere(4)
+        >>> a.str_possuidas()
+        '[1, 2]'
+        >>> a.str_repetidas()
+        '[1 (1), 2 (2)]'
+        >>> b.str_possuidas()
+        '[3, 4, 5]'
+        >>> b.str_repetidas()
+        '[3 (1), 5 (1)]'
+        >>> a.troca_maxima(b)
+        >>> a.str_possuidas()
+        '[1, 2, 3, 5]'
+        >>> a.str_repetidas()
+        '[2 (1)]'
+        >>> b.str_possuidas()
+        '[1, 2, 3, 4, 5]'
+        >>> b.str_repetidas()
         '[]'
         '''
         a = self
@@ -288,7 +339,7 @@ class Colecao:
         if self.tamanho_max != colecao.tamanho_max:
             raise ValueError('O tamanho das coleções é diferente.')
         else:
-            if a is not None and b is not None:
+            if a.figurinhas is not None and b.figurinhas is not None:
                 repetidas_a = a.__repetidas()
                 repetidas_b = b.__repetidas()
                 # Caso as duas coleções possuam figurinhas repetidas
@@ -311,8 +362,8 @@ class Colecao:
                         b.remove(trocaveis_b.item)
                         b.insere(trocaveis_a.item)
                         a.remove(trocaveis_a.item)
-                        
-        
+
+
     def __repetidas(self) -> Colecao:
         '''
         Cria uma nova colecao com as figurinhas repetidas da *colecao*
@@ -350,4 +401,3 @@ class Colecao:
                 if c.proximo is not None and rep.item == c.proximo.item:
                     repetidas.remove(rep.item)
                 rep = rep.proximo
-
