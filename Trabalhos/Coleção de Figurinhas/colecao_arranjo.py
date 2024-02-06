@@ -43,7 +43,6 @@ class Colecao:
     >>> d.str_repetidas()
     '[13 (1), 19 (1)]'
 
-
     >>> c.troca_maxima(d)
     >>> c.str_possuidas()
     '[13, 15, 19, 24, 48]'
@@ -70,7 +69,7 @@ class Colecao:
         '''
         Insere a *figurinha* na coleção.
 
-        Requer que 1 <= *figurinha* <= quantidade_total
+        Requer que 1 <= *figurinha* <= tamanho da coleção
 
         Exemplos:
         >>> c = Colecao(50)
@@ -95,7 +94,7 @@ class Colecao:
         '''
         Remove a *figurinha* da coleção.
 
-        Requer que 1 <= *figurinha* <= quantidade_total
+        Requer que 1 <= *figurinha* <= tamanho da coleção
         Requer que *figurinha* faça parte da coleção.
 
         Exemplos:
@@ -243,7 +242,7 @@ class Colecao:
                     trocaveis_b[indice_b] = figurinha + 1
                     indice_b += 1
             # Percorre os arranjos de cartas trocáveis até um deles 
-            # chegar à zero.
+            # chegar à zero (esse não possui mais cartas trocáveis).
             restam_trocas = True
             i = 0
             while restam_trocas and i < len(trocaveis_a):

@@ -42,7 +42,6 @@ class Colecao:
     >>> d.str_repetidas()
     '[13 (1), 19 (1)]'
 
-
     >>> c.troca_maxima(d)
     >>> c.str_possuidas()
     '[13, 15, 19, 24, 48]'    
@@ -66,7 +65,7 @@ class Colecao:
         '''
         Insere a *figurinha* na coleção.
 
-        Requer que 1 <= *figurinha* <= quantidade_total
+        Requer que 1 <= *figurinha* <= tamanho da coleção
         '''
         raise NotImplemented
 
@@ -74,7 +73,7 @@ class Colecao:
         '''
         Remove a *figurinha* da coleção.
 
-        Requer que 1 <= *figurinha* <= quantidade_total
+        Requer que 1 <= *figurinha* <= tamanho da coleção
         Requer que *figurinha* faça parte da coleção.
         '''
         raise NotImplemented
