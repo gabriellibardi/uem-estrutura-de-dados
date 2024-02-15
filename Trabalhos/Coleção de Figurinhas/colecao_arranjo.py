@@ -279,20 +279,9 @@ class Colecao:
         if len(self.figurinhas) != len(colecao.figurinhas):
             raise ValueError('O tamanho das coleções é diferente.')
         else:
-            # Percorre as duas coleções e coloca as cartas que podem 
-            # ser trocadas em arranjos.
-            trocaveis_a = array(len(self.figurinhas), 0)
-            trocaveis_b = array(len(self.figurinhas), 0)
-            indice_a = 0
-            indice_b = 0
-            for figurinha in range(len(self.figurinhas)):
-                if self.figurinhas[figurinha] >= 2 and colecao.figurinhas[figurinha] == 0:
-                    trocaveis_a[indice_a] = figurinha + 1
-                    indice_a += 1
-                elif colecao.figurinhas[figurinha] >= 2 and self.figurinhas[figurinha] == 0:
-                    trocaveis_b[indice_b] = figurinha + 1
-                    indice_b += 1
-            # Percorre os arranjos de cartas trocáveis até um deles 
+            trocaveis_a = self.__trocaveis(colecao)
+            trocaveis_b = colecao.__trocaveis(self)
+            # Percorre os arranjos de cartas trocáveis até um deles
             # chegar à zero (esse não possui mais cartas trocáveis).
             restam_trocas = True
             i = 0
@@ -305,3 +294,18 @@ class Colecao:
                 else:
                     restam_trocas = False
                 i += 1
+
+    def __trocaveis(self, colecao_comparada: Colecao) -> array[int]:
+        '''
+        Cria um array do tamanho da coleção com as suas figurinhas que podem
+        ser trocadas em relação a *coleção_comparada*.
+        As figurinhas do array serão ordenadas pelo seu índice.
+        '''
+        trocaveis = array(len(self.figurinhas), 0)
+        i = 0
+        for figurinha in range(len(self.figurinhas)):
+            if self.figurinhas[figurinha] >= 2 and \
+                colecao_comparada.figurinhas[figurinha] == 0:
+                trocaveis[i] = figurinha + 1
+                i += 1
+        return trocaveis

@@ -363,7 +363,6 @@ class Colecao:
                         b.insere(trocaveis_a.item)
                         a.remove(trocaveis_a.item)
 
-
     def __repetidas(self) -> Colecao:
         '''
         Cria uma nova colecao com as figurinhas repetidas da *colecao*
